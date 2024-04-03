@@ -33,4 +33,23 @@ describe('#BaseBusiness', () => {
 
         expect(() => concreteClass.create({})).toThrow(validationError)
     })
+    test('should call _create and _validateRequiredFields on create', () => {
+        const VALIDATION_SUCCEEDED = true
+        const CREATE_SUCCEEDED = true
+
+        class ConcreteClass extends BaseBusiness {
+            _validateRequiredFields = jest.fn().mockReturnValue(VALIDATION_SUCCEEDED)
+            _create = jest.fn().mockReturnValue(CREATE_SUCCEEDED)
+        }
+        const concreteClass = new ConcreteClass()
+        const createFromBaseClass = jest.spyOn(
+            BaseBusiness.prototype,
+            BaseBusiness.prototype.create.name
+        )
+        const result = concreteClass.create({})
+
+        expect(result).toBeTruthy()
+        expect(concreteClass._validateRequiredFields).toHaveBeenCalled()
+        expect(concreteClass._create).toHaveBeenCalled()
+    })
 })
