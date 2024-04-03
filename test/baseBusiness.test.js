@@ -13,4 +13,14 @@ describe('#BaseBusiness', () => {
 
         expect(() => concreteClass.create({})).toThrow(validationError)
     })
+    test('should throw an error when _validateRequiredFields returns false', () => {
+        const VALIDATION_DOESNT_SUCCEEDED = false
+        class ConcreteClass extends BaseBusiness {
+            _validateRequiredFields = jest.fn().mockReturnValue(VALIDATION_DOESNT_SUCCEEDED)
+        }
+        const concreteClass = new ConcreteClass()
+        const validationError = new Error(`invalid data`)
+
+        expect(() => concreteClass.create({})).toThrow(validationError)
+    })
 })
