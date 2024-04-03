@@ -23,4 +23,14 @@ describe('#BaseBusiness', () => {
 
         expect(() => concreteClass.create({})).toThrow(validationError)
     })
+    test('Should throw an error when child class doesn\'t implement _create function.', () => {
+        const VALIDATION_SUCCEEDED = true
+        class ConcreteClass extends BaseBusiness {
+            _validateRequiredFields = jest.fn().mockReturnValue(VALIDATION_SUCCEEDED)
+        }
+        const concreteClass = new ConcreteClass()
+        const validationError = new NotImplementedException(concreteClass._create.name)
+
+        expect(() => concreteClass.create({})).toThrow(validationError)
+    })
 })
